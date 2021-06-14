@@ -1,11 +1,11 @@
 <template>
   <form class="create-twoot-panel" :class="{'--exceeded' : newTwootCharacterCount > 180}" @submit.prevent="createNewTwoot">
     <label for="newTwoot"><strong>New Twoot</strong> ({{newTwootCharacterCount}}/180)</label>
-    <textarea id="newTwoot" rows="4" v-model="createTwootForm.content"></textarea>
+    <textarea id="newTwoot" rows="4" v-model="state.createTwootForm.content"></textarea>
     <div class="user-profile__create-twoot-type">
       <label for="newTwootType"><strong>Twoot Type</strong></label>
-      <select id="newTwootType" v-model="createTwootForm.twootType">
-        <option :key="index" :value="option.value" v-for="(option, index) in twootTypes">{{option.name}}</option>
+      <select id="newTwootType" v-model="state.createTwootForm.twootType">
+        <option :key="index" :value="option.value" v-for="(option, index) in state.twootTypes">{{option.name}}</option>
       </select>
     </div>
     <button>Twoot</button>
@@ -13,10 +13,11 @@
 </template>
 
 <script>
+  import { reactive, computed } from "vue";
   export default {
     name: "CreateTwootPanel",
-    data() {
-      return {
+    setup(props, ctx) {
+      const state = reactive({
         twootTypes: [
           { value: "draft", name: "Draft" },
           { value: "instant", name: "Instant Twoot" }
@@ -25,21 +26,16 @@
           content: "",
           twootType: "instant"
         }
-      }
-    },
-    computed: {
-      newTwootCharacterCount() {
-        return this.createTwootForm.content.length;
-      }
-    },
-    methods: {
-      createNewTwoot() {
-        if(this.createTwootForm.content && this.createTwootForm.twootType !== "draft") {
-          this.$emit("add-twoot", this.createTwootForm)
-          this.createTwootForm.content = "";
-          this.createTwootForm.twootType = "instant";
+      });
+      const newTwootCharacterCount = computed(() => state.createTwootForm.content.length);
+      function createNewTwoot() {
+        if(state.createTwootForm.content && state.createTwootForm.twootType !== "draft") {
+          ctx.emit("add-twoot", state.createTwootForm)
+          state.createTwootForm.content = "";
+          state.createTwootForm.twootType = "instant";
         } 
       }
+      return { state, newTwootCharacterCount, createNewTwoot };
     }
   }
 </script>
