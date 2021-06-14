@@ -6,7 +6,7 @@
       <div class="user-profile__follower-count">
         <strong>Followers:</strong> {{ followers }}
       </div>
-      <CreateTwootPanel @add-twoot="addTwoot" />
+      <CreateTwootPanelNew @add-twoot="addTwoot" />
     </div>
     <div class="user-profile__twoots-wrapper">
       <TwootItem :key="twoot.id" :username="user.username" :twoot="twoot" v-for="twoot in user.twoots" />
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-  import CreateTwootPanel from "./CreateTwootPanel.vue";
+  import CreateTwootPanelNew from "./CreateTwootPanelNew.vue";
   import TwootItem from "./TwootItem.vue";
   export default {
     name: "UserProfile",
-    components: { CreateTwootPanel, TwootItem },
+    components: { CreateTwootPanelNew, TwootItem },
     data() {
       return {
         followers: 0,
